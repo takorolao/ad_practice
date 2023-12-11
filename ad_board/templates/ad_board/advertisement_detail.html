@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ ad.title }}</h2>
+    <p>{{ ad.content }}</p>
+    <p>Author: {{ ad.author.username }} | Created at: {{ ad.created_at }}</p>
+
+    <h3>Comments:</h3>
+    {% for comment in comments %}
+        <div class="comment">
+            <p>{{ comment.content }}</p>
+            <p>Author: {{ comment.author.username }} | Created at: {{ comment.created_at }}</p>
+        </div>
+    {% endfor %}
+
+    <a href="{% url 'create_comment' pk=ad.pk %}">Add Comment</a>
+{% endblock %}

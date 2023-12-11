@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Доска Объявлений</h2>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'create_advertisement' %}">Создать объявление</a>
+    {% endif %}
+
+    {% for ad in ads %}
+        <div class="advertisement">
+            <h3>{{ ad.title }}</h3>
+            <p>{{ ad.content }}</p>
+            <p>Author: {{ ad.author.username }} | Created at: {{ ad.created_at }}</p>
+            <a href="{% url 'advertisement_detail' pk=ad.pk %}">View Details</a>
+
+            {% if user.is_authenticated and user == ad.author %}
+                | <a href="{% url 'edit_advertisement' pk=ad.pk %}">Edit</a>
+                | <a href="{% url 'delete_advertisement' pk=ad.pk %}">Delete</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if ads.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ ads.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ ads.number }} of {{ ads.paginator.num_pages }}.
+            </span>
+
+            {% if ads.has_next %}
+                <a href="?page={{ ads.next_page_number }}">next</a>
+                <a href="?page={{ ads.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
